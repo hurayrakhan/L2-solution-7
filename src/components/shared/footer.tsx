@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Home, Mail, Phone, MapPin, Heart } from "lucide-react";
 
