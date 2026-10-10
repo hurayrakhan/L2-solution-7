@@ -104,9 +104,25 @@ The login page at `/login` features distinct **One-Click Demo Login** buttons fo
    ```
 
 3. **Configure Environment Variables**:
-   Create `.env.local` in the project root:
+   Copy the example environment configuration into `.env.local`:
+   ```bash
+   cp .env.example .env.local
+   ```
+
+   The `.env.local` file contains:
    ```env
+   # Backend API Base URL
    NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+
+   # Evaluation One-Click Demo Credentials
+   NEXT_PUBLIC_DEMO_ADMIN_EMAIL=admin@moveinbd.com
+   NEXT_PUBLIC_DEMO_ADMIN_PASSWORD=AdminPass123!
+
+   NEXT_PUBLIC_DEMO_PROVIDER_EMAIL=owner@moveinbd.com
+   NEXT_PUBLIC_DEMO_PROVIDER_PASSWORD=OwnerPass123!
+
+   NEXT_PUBLIC_DEMO_TENANT_EMAIL=tenant@moveinbd.com
+   NEXT_PUBLIC_DEMO_TENANT_PASSWORD=TenantPass123!
    ```
 
 4. **Run the Development Server**:
