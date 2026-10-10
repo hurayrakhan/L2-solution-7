@@ -70,10 +70,16 @@ export default function ProviderDashboardPage() {
   const { user } = useAuth();
   const [listings, setListings] = React.useState<MyListing[]>(INITIAL_PROVIDER_LISTINGS);
   const [createModalOpen, setCreateModalOpen] = React.useState(false);
+  const [wizardStep, setWizardStep] = React.useState<1 | 2 | 3>(1);
+
+  // Wizard Form Fields
   const [newTitle, setNewTitle] = React.useState("");
   const [newCategory, setNewCategory] = React.useState<"PROPERTY" | "VEHICLE">("PROPERTY");
   const [newRate, setNewRate] = React.useState("");
+  const [newDeposit, setNewDeposit] = React.useState("");
   const [newLocation, setNewLocation] = React.useState("");
+  const [newSpecs, setNewSpecs] = React.useState("");
+  const [agreedTerms, setAgreedTerms] = React.useState(true);
 
   const toggleAvailability = (id: string) => {
     setListings((prev) =>
@@ -84,29 +90,46 @@ export default function ProviderDashboardPage() {
     toast.success("Listing availability status toggled");
   };
 
-  const handleCreateListing = (e: React.FormEvent) => {
+  const handleNextStep = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newTitle || !newRate || !newLocation) {
-      toast.error("Please fill in all listing details");
-      return;
+    if (wizardStep === 1) {
+      if (!newTitle.trim() || !newLocation.trim()) {
+        toast.error("Please provide both title and location");
+        return;
+      }
+      setWizardStep(2);
+    } else if (wizardStep === 2) {
+      if (!newRate.trim()) {
+        toast.error("Please enter the rent or transport fare rate");
+        return;
+      }
+      setWizardStep(3);
+    } else if (wizardStep === 3) {
+      if (!agreedTerms) {
+        toast.error("Please confirm agreement with platform terms");
+        return;
+      }
+
+      const created: MyListing = {
+        id: `lst-${Date.now()}`,
+        title: newTitle,
+        category: newCategory,
+        rate: newRate,
+        location: newLocation,
+        isAvailable: true,
+        totalBookings: 0,
+      };
+
+      setListings((prev) => [created, ...prev]);
+      setCreateModalOpen(false);
+      setWizardStep(1);
+      setNewTitle("");
+      setNewRate("");
+      setNewDeposit("");
+      setNewLocation("");
+      setNewSpecs("");
+      toast.success("Listing published successfully through 3-step verification wizard!");
     }
-
-    const created: MyListing = {
-      id: `lst-${Date.now()}`,
-      title: newTitle,
-      category: newCategory,
-      rate: newRate,
-      location: newLocation,
-      isAvailable: true,
-      totalBookings: 0,
-    };
-
-    setListings((prev) => [created, ...prev]);
-    setCreateModalOpen(false);
-    setNewTitle("");
-    setNewRate("");
-    setNewLocation("");
-    toast.success("New listing created and published live!");
   };
 
   return (
@@ -211,62 +234,149 @@ export default function ProviderDashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Create Listing Modal */}
-      <Dialog open={createModalOpen} onOpenChange={setCreateModalOpen}>
-        <DialogContent size="sm">
+      {/* Create Listing Wizard Modal */}
+      <Dialog open={createModalOpen} onOpenChange={(open) => {
+        setCreateModalOpen(open);
+        if (!open) setWizardStep(1);
+      }}>
+        <DialogContent size="md">
           <DialogHeader>
-            <DialogTitle>Add New Property or Vehicle</DialogTitle>
-            <DialogDescription>
-              Publish a new listing to start receiving customer reservation requests.
+            <div className="flex items-center justify-between">
+              <DialogTitle className="text-base sm:text-lg">
+                Create Listing — Step {wizardStep} of 3
+              </DialogTitle>
+              <Badge variant="tonal-blue" size="xs">
+                {wizardStep === 1 ? "1. Category & Info" : wizardStep === 2 ? "2. Pricing & Escrow" : "3. Review & Publish"}
+              </Badge>
+            </div>
+            <DialogDescription className="text-xs">
+              Complete the verified multi-step form to publish your property or shifting vehicle.
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleCreateListing} className="space-y-4 pt-2">
-            <div>
-              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 block mb-1">
-                Category
-              </label>
-              <Select
-                value={newCategory}
-                onValueChange={(val: any) => setNewCategory(val)}
-              >
-                <SelectTrigger className="h-10 text-xs">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="PROPERTY">Residential Property / Room</SelectItem>
-                  <SelectItem value="VEHICLE">Shifting Truck / Pickup</SelectItem>
-                </SelectContent>
-              </Select>
+          {/* Wizard Step Progress Bar */}
+          <div className="grid grid-cols-3 gap-2 my-2">
+            {[1, 2, 3].map((step) => (
+              <div
+                key={step}
+                className={`h-1.5 rounded-full transition-all ${
+                  step <= wizardStep ? "bg-primary-500" : "bg-slate-200 dark:bg-slate-800"
+                }`}
+              />
+            ))}
+          </div>
+
+          <form onSubmit={handleNextStep} className="space-y-4 pt-1">
+            {wizardStep === 1 && (
+              <div className="space-y-3.5">
+                <div>
+                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 block mb-1">
+                    Listing Category
+                  </label>
+                  <Select
+                    value={newCategory}
+                    onValueChange={(val: any) => setNewCategory(val)}
+                  >
+                    <SelectTrigger className="h-10 text-xs">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="PROPERTY">Residential Property / Roommate Flat</SelectItem>
+                      <SelectItem value="VEHICLE">Shifting Truck / Pickup Fleet</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <Input
+                  label="Listing Title"
+                  placeholder="e.g. 2BHK Furnished Apartment in Dhanmondi"
+                  isRequired
+                  value={newTitle}
+                  onChange={(e) => setNewTitle(e.target.value)}
+                />
+
+                <Input
+                  label="Area / Neighborhood Location"
+                  placeholder="e.g. Road 12, Banani, Dhaka"
+                  isRequired
+                  value={newLocation}
+                  onChange={(e) => setNewLocation(e.target.value)}
+                />
+              </div>
+            )}
+
+            {wizardStep === 2 && (
+              <div className="space-y-3.5">
+                <Input
+                  label={newCategory === "PROPERTY" ? "Monthly Rent (BDT)" : "Base Moving Fare (BDT)"}
+                  placeholder={newCategory === "PROPERTY" ? "e.g. ৳35,000" : "e.g. ৳1,500"}
+                  isRequired
+                  value={newRate}
+                  onChange={(e) => setNewRate(e.target.value)}
+                />
+
+                <Input
+                  label="Required Escrow Advance Security Deposit"
+                  placeholder="e.g. ৳20,000 (Refundable upon checkout)"
+                  value={newDeposit}
+                  onChange={(e) => setNewDeposit(e.target.value)}
+                />
+
+                <Input
+                  label="Specifications / Included Utilities"
+                  placeholder={newCategory === "PROPERTY" ? "e.g. Gas, Electricity, Water included" : "e.g. 1-Ton capacity, 2 helpers included"}
+                  value={newSpecs}
+                  onChange={(e) => setNewSpecs(e.target.value)}
+                />
+              </div>
+            )}
+
+            {wizardStep === 3 && (
+              <div className="space-y-4">
+                <div className="p-4 rounded-xl border border-border bg-slate-50 dark:bg-slate-900/60 space-y-2 text-xs">
+                  <h4 className="font-bold text-foreground">Summary Preview:</h4>
+                  <div className="grid grid-cols-2 gap-2 text-slate-600 dark:text-slate-300">
+                    <div>Category: <span className="font-semibold text-foreground">{newCategory}</span></div>
+                    <div>Location: <span className="font-semibold text-foreground">{newLocation}</span></div>
+                    <div>Rate: <span className="font-semibold text-foreground">{newRate}</span></div>
+                    <div>Security Deposit: <span className="font-semibold text-foreground">{newDeposit || "Not required"}</span></div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 pt-1">
+                  <input
+                    type="checkbox"
+                    id="termsCheck"
+                    checked={agreedTerms}
+                    onChange={(e) => setAgreedTerms(e.target.checked)}
+                    className="rounded border-slate-300 text-primary-600 focus:ring-primary-500 size-4"
+                  />
+                  <label htmlFor="termsCheck" className="text-xs text-slate-600 dark:text-slate-400 cursor-pointer">
+                    I confirm ownership or operational authorization and agree to MoveInBD escrow protection terms.
+                  </label>
+                </div>
+              </div>
+            )}
+
+            {/* Navigation buttons */}
+            <div className="flex items-center justify-between gap-3 pt-3 border-t border-border">
+              {wizardStep > 1 ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setWizardStep((prev) => (prev - 1) as 1 | 2)}
+                >
+                  Back
+                </Button>
+              ) : (
+                <div />
+              )}
+
+              <Button type="submit" variant="default" size="sm">
+                {wizardStep < 3 ? "Continue to Next Step" : "Publish Listing Live"}
+              </Button>
             </div>
-
-            <Input
-              label="Listing Title"
-              placeholder="e.g. 2BHK Furnished Apartment in Dhanmondi"
-              isRequired
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
-            />
-
-            <Input
-              label="Location / Area"
-              placeholder="e.g. Road 12, Banani, Dhaka"
-              isRequired
-              value={newLocation}
-              onChange={(e) => setNewLocation(e.target.value)}
-            />
-
-            <Input
-              label="Fare or Monthly Rent"
-              placeholder="e.g. ৳35,000/mo or ৳1,500 Base + ৳50/km"
-              isRequired
-              value={newRate}
-              onChange={(e) => setNewRate(e.target.value)}
-            />
-
-            <Button type="submit" variant="default" fullWidth size="lg">
-              Publish Listing
-            </Button>
           </form>
         </DialogContent>
       </Dialog>
