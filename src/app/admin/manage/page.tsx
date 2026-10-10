@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import {
   Building,
@@ -90,11 +91,39 @@ const INITIAL_RESOURCES: ResourceItem[] = [
   },
 ];
 
-export default function AdminManagePage() {
+function AdminManageContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const urlCategory = (searchParams.get("category") || "ALL").toUpperCase();
+  const initialTab: "ALL" | "PROPERTY" | "VEHICLE" =
+    urlCategory === "PROPERTY" || urlCategory === "VEHICLE" ? urlCategory : "ALL";
+  const initialSearch = searchParams.get("q") || "";
+
   const [resources, setResources] = React.useState<ResourceItem[]>(INITIAL_RESOURCES);
-  const [activeTab, setActiveTab] = React.useState<"ALL" | "PROPERTY" | "VEHICLE">("ALL");
-  const [search, setSearch] = React.useState("");
+  const [activeTab, setActiveTab] = React.useState<"ALL" | "PROPERTY" | "VEHICLE">(initialTab);
+  const [search, setSearch] = React.useState(initialSearch);
   const [selectedItem, setSelectedItem] = React.useState<ResourceItem | null>(null);
+
+  const updateFilters = (tabVal: string, searchVal: string) => {
+    const params = new URLSearchParams();
+    if (tabVal && tabVal !== "ALL") params.set("category", tabVal.toLowerCase());
+    if (searchVal.trim()) params.set("q", searchVal.trim());
+    const queryStr = params.toString();
+    router.replace(`/admin/manage${queryStr ? `?${queryStr}` : ""}`);
+  };
+
+  const handleTabChange = (val: string) => {
+    const nextTab = val as "ALL" | "PROPERTY" | "VEHICLE";
+    setActiveTab(nextTab);
+    updateFilters(nextTab, search);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const nextQuery = e.target.value;
+    setSearch(nextQuery);
+    updateFilters(activeTab, nextQuery);
+  };
 
   const handleUpdateStatus = (id: string, newStatus: "ACTIVE" | "REJECTED") => {
     setResources((prev) =>
@@ -126,7 +155,7 @@ export default function AdminManagePage() {
     >
       {/* Search and Tabs Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <Tabs value={activeTab} onValueChange={(val: string) => setActiveTab(val as "ALL" | "PROPERTY" | "VEHICLE")}>
+        <Tabs value={activeTab} onValueChange={handleTabChange}>
           <TabsList>
             <TabsTrigger value="ALL">All Listings</TabsTrigger>
             <TabsTrigger value="PROPERTY">Properties</TabsTrigger>
@@ -137,7 +166,7 @@ export default function AdminManagePage() {
         <Input
           placeholder="Filter by title, owner, area..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={handleSearchChange}
           leftIcon={<Search className="size-4" />}
           className="w-full sm:w-72"
         />
@@ -233,5 +262,19 @@ export default function AdminManagePage() {
         <Pagination currentPage={1} totalPages={1} onPageChange={() => {}} />
       </div>
     </DashboardLayout>
+  );
+}
+
+export default function AdminManagePage() {
+  return (
+    <React.Suspense
+      fallback={
+        <div className="p-8 text-center text-xs text-slate-500">
+          Loading platform resource management...
+        </div>
+      }
+    >
+      <AdminManageContent />
+    </React.Suspense>
   );
 }
