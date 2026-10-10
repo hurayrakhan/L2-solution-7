@@ -126,7 +126,7 @@ export default function AdminManagePage() {
     >
       {/* Search and Tabs Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <Tabs value={activeTab} onValueChange={(val: any) => setActiveTab(val)}>
+        <Tabs value={activeTab} onValueChange={(val: string) => setActiveTab(val as "ALL" | "PROPERTY" | "VEHICLE")}>
           <TabsList>
             <TabsTrigger value="ALL">All Listings</TabsTrigger>
             <TabsTrigger value="PROPERTY">Properties</TabsTrigger>

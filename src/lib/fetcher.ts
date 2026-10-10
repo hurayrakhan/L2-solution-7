@@ -87,7 +87,7 @@ export async function fetcher<T = unknown>(
   });
 
   const responseText = await res.text();
-  let parsedData: any = null;
+  let parsedData: Record<string, unknown> | null = null;
 
   if (responseText) {
     try {
@@ -99,9 +99,11 @@ export async function fetcher<T = unknown>(
 
   if (!res.ok) {
     const errorMessage =
-      parsedData?.message ||
-      parsedData?.error ||
-      `Request failed with status ${res.status}`;
+      typeof parsedData?.message === "string"
+        ? parsedData.message
+        : typeof parsedData?.error === "string"
+        ? parsedData.error
+        : `Request failed with status ${res.status}`;
     const errorObj: FetcherError = {
       error: errorMessage,
       statusCode: res.status,

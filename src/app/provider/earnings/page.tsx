@@ -126,7 +126,7 @@ export default function ProviderEarningsPage() {
                     tickFormatter={(v) => `৳${(v / 1000).toFixed(0)}k`}
                   />
                   <Tooltip
-                    formatter={(val: any) => [`৳${Number(val).toLocaleString()}`, "Earnings"]}
+                    formatter={(val: unknown) => [`৳${Number(val).toLocaleString()}`, "Earnings"]}
                     contentStyle={{
                       backgroundColor: "#0f172a",
                       borderColor: "#1e293b",

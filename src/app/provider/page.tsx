@@ -275,7 +275,7 @@ export default function ProviderDashboardPage() {
                   </label>
                   <Select
                     value={newCategory}
-                    onValueChange={(val: any) => setNewCategory(val)}
+                    onValueChange={(val: string) => setNewCategory(val as "PROPERTY" | "VEHICLE")}
                   >
                     <SelectTrigger className="h-10 text-xs">
                       <SelectValue />

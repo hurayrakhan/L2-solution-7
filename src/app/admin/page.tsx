@@ -143,7 +143,7 @@ export default function AdminDashboardPage() {
                     tickFormatter={(v) => `৳${(v / 1000).toFixed(0)}k`}
                   />
                   <Tooltip
-                    formatter={(value: any) => [`৳${Number(value).toLocaleString()}`, "Revenue"]}
+                    formatter={(value: unknown) => [`৳${Number(value).toLocaleString()}`, "Revenue"]}
                     contentStyle={{
                       backgroundColor: "#0f172a",
                       borderColor: "#1e293b",
@@ -182,7 +182,7 @@ export default function AdminDashboardPage() {
                   <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} />
                   <YAxis stroke="#94a3b8" fontSize={11} />
                   <Tooltip
-                    formatter={(val: any) => [val, "Bookings"]}
+                    formatter={(val: unknown) => [String(val), "Bookings"]}
                     contentStyle={{
                       backgroundColor: "#0f172a",
                       borderColor: "#1e293b",
