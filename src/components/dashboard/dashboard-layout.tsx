@@ -66,11 +66,11 @@ export function DashboardLayout({ children, title, subtitle }: DashboardLayoutPr
   const getRoleBadge = () => {
     switch (role) {
       case "ADMIN":
-        return <Badge variant="tonal-purple">ADMIN PORTAL</Badge>;
+        return <Badge variant="tonal-purple" size="xs">Admin Portal</Badge>;
       case "PROVIDER":
-        return <Badge variant="tonal-green">PROVIDER SUITE</Badge>;
+        return <Badge variant="tonal-green" size="xs">Provider Suite</Badge>;
       default:
-        return <Badge variant="tonal-blue">TENANT HUB</Badge>;
+        return <Badge variant="tonal-blue" size="xs">Tenant Hub</Badge>;
     }
   };
 

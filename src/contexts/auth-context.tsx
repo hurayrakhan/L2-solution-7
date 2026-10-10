@@ -31,26 +31,27 @@ interface AuthContextType {
 
 const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
 
+import { ENV } from "@/config/env";
+
 const DEMO_CREDENTIALS: Record<UserRole, { email: string; pass: string; title: string }> = {
   ADMIN: {
-    email: "admin@moveinbd.com",
-    pass: "AdminPass123!",
+    email: ENV.DEMO_ADMIN.email,
+    pass: ENV.DEMO_ADMIN.password,
     title: "Admin",
   },
   PROVIDER: {
-    email: "owner@moveinbd.com",
-    pass: "OwnerPass123!",
+    email: ENV.DEMO_PROVIDER.email,
+    pass: ENV.DEMO_PROVIDER.password,
     title: "Provider / Landlord",
   },
   TENANT_USER: {
-    email: "tenant@moveinbd.com",
-    pass: "TenantPass123!",
+    email: ENV.DEMO_TENANT.email,
+    pass: ENV.DEMO_TENANT.password,
     title: "Tenant / Customer",
   },
 };
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+const API_BASE_URL = ENV.API_URL;
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<User | null>(null);

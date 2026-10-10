@@ -50,7 +50,8 @@
   --color-primary-tonal: var(--primary-tonal);
   --color-primary-container: var(--primary-container);
 
-  /* Primary Chromatic Scale (600 to 50) */
+  /* Primary Chromatic Scale (700 to 50) */
+  --color-primary-700: var(--primary-700);
   --color-primary-600: var(--primary-600);
   --color-primary-500: var(--primary-500);
   --color-primary-400: var(--primary-400);
@@ -263,7 +264,8 @@
   --primary-foreground: #ffffff;
   --primary-container: #1e3a6e;
 
-  /* Primary Chromatic Scale (600 to 50) */
+  /* Primary Chromatic Scale (700 to 50) */
+  --primary-700: #004b7a;
   --primary-600: #005d97;
   --primary-500: #0077c0;
   --primary-400: #268cd4;

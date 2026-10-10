@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Badge } from "@/components/ui/badge";
+import { Badge, type BadgeProps } from "@/components/ui/badge";
 
 export type EntityStatus =
   | "PENDING"
@@ -23,57 +23,85 @@ export type EntityStatus =
 export interface StatusBadgeProps {
   status: EntityStatus;
   className?: string;
+  size?: "xs" | "sm" | "default" | "md" | "lg";
+  uppercase?: boolean;
 }
 
-export function StatusBadge({ status, className }: StatusBadgeProps) {
-  const normalized = status ? status.toUpperCase() : "UNKNOWN";
+export function StatusBadge({
+  status,
+  className,
+  size = "sm",
+  uppercase = false,
+}: StatusBadgeProps) {
+  const normalized = status ? status.toUpperCase().trim() : "UNKNOWN";
 
-  switch (normalized) {
-    case "ACTIVE":
-    case "AVAILABLE":
-    case "COMPLETED":
-    case "PAID":
-    case "RELEASED":
-    case "VERIFIED":
-      return (
-        <Badge variant="tonal-green" dot dotColor="bg-emerald-500" className={className}>
-          {normalized}
-        </Badge>
-      );
+  const getStatusConfig = (): {
+    variant: NonNullable<BadgeProps["variant"]>;
+    label: string;
+    dotColor?: string;
+  } => {
+    switch (normalized) {
+      case "ACTIVE":
+        return { variant: "tonal-green", label: "Active", dotColor: "bg-emerald-500" };
+      case "AVAILABLE":
+        return { variant: "tonal-green", label: "Available", dotColor: "bg-emerald-500" };
+      case "COMPLETED":
+        return { variant: "tonal-green", label: "Completed", dotColor: "bg-emerald-500" };
+      case "PAID":
+        return { variant: "tonal-green", label: "Paid", dotColor: "bg-emerald-500" };
+      case "RELEASED":
+        return { variant: "tonal-green", label: "Released", dotColor: "bg-emerald-500" };
+      case "VERIFIED":
+        return { variant: "tonal-green", label: "Verified", dotColor: "bg-emerald-500" };
 
-    case "PENDING":
-    case "HELD":
-    case "IN_TRANSIT":
-    case "UNPAID":
-    case "UNVERIFIED":
-      return (
-        <Badge variant="tonal-orange" dot dotColor="bg-orange-500" className={className}>
-          {normalized}
-        </Badge>
-      );
+      case "CONFIRMED":
+        return { variant: "tonal-blue", label: "Confirmed", dotColor: "bg-blue-600" };
+      case "RENTED":
+        return { variant: "tonal-blue", label: "Rented", dotColor: "bg-blue-600" };
 
-    case "CONFIRMED":
-    case "RENTED":
-      return (
-        <Badge variant="tonal-blue" dot dotColor="bg-blue-500" className={className}>
-          {normalized}
-        </Badge>
-      );
+      case "IN_TRANSIT":
+        return { variant: "tonal-orange", label: "In Transit", dotColor: "bg-orange-500" };
+      case "PENDING":
+        return { variant: "tonal-orange", label: "Pending", dotColor: "bg-orange-500" };
+      case "HELD":
+        return { variant: "tonal-orange", label: "In Escrow", dotColor: "bg-amber-500" };
+      case "UNPAID":
+        return { variant: "tonal-orange", label: "Unpaid", dotColor: "bg-orange-500" };
+      case "UNVERIFIED":
+        return { variant: "tonal-orange", label: "Unverified", dotColor: "bg-orange-500" };
 
-    case "CANCELLED":
-    case "REJECTED":
-    case "REFUNDED":
-      return (
-        <Badge variant="tonal-red" dot dotColor="bg-red-500" className={className}>
-          {normalized}
-        </Badge>
-      );
+      case "CANCELLED":
+        return { variant: "tonal-red", label: "Cancelled", dotColor: "bg-red-500" };
+      case "REJECTED":
+        return { variant: "tonal-red", label: "Rejected", dotColor: "bg-red-500" };
+      case "REFUNDED":
+        return { variant: "tonal-red", label: "Refunded", dotColor: "bg-red-500" };
 
-    default:
-      return (
-        <Badge variant="tonal-gray" className={className}>
-          {normalized}
-        </Badge>
-      );
-  }
+      default:
+        return {
+          variant: "tonal-gray",
+          label: normalized
+            .toLowerCase()
+            .split("_")
+            .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+            .join(" "),
+          dotColor: "bg-slate-400",
+        };
+    }
+  };
+
+  const { variant, label, dotColor } = getStatusConfig();
+  const displayLabel = uppercase ? label.toUpperCase() : label;
+
+  return (
+    <Badge
+      variant={variant}
+      dot
+      size={size}
+      dotClassName={dotColor}
+      className={className}
+    >
+      {displayLabel}
+    </Badge>
+  );
 }

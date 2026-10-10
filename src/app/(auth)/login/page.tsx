@@ -5,11 +5,13 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Shield, Home, Truck, Lock, Mail, ArrowRight } from "lucide-react";
+import { Shield, Home, Truck, Lock, Mail, ArrowRight, Sparkles } from "lucide-react";
 
 import { useAuth } from "@/contexts/auth-context";
+import { ENV } from "@/config/env";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const loginSchema = z.object({
@@ -27,6 +29,7 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -119,48 +122,136 @@ export default function LoginPage() {
                 <span className="w-full border-t border-border" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-3 text-slate-500 font-bold tracking-wider">
-                  🚀 One-Click Demo Login
+                <span className="bg-card px-3 text-slate-500 font-bold tracking-wider flex items-center gap-1.5">
+                  <Sparkles className="size-3 text-primary-500" />
+                  One-Click Demo Login (.env loaded)
                 </span>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                loading={activeDemo === "ADMIN"}
-                onClick={() => handleDemo("ADMIN")}
-                leftIcon={<Shield className="size-4 text-purple-600" />}
-                className="justify-start text-xs border-purple-200 dark:border-purple-900 hover:bg-purple-50 dark:hover:bg-purple-950/40"
-              >
-                Admin Demo
-              </Button>
+            <div className="flex flex-col gap-2.5">
+              {/* Admin Card */}
+              <div className="p-3 rounded-lg border border-purple-200/80 dark:border-purple-900/60 bg-purple-50/40 dark:bg-purple-950/20 flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <Shield className="size-4 text-purple-600 shrink-0" />
+                    <span className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                      {ENV.DEMO_ADMIN.label}
+                    </span>
+                    <Badge variant="tonal-purple" size="xs">ADMIN</Badge>
+                  </div>
+                  <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                    {ENV.DEMO_ADMIN.email}
+                  </p>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="xs"
+                    onClick={() => {
+                      setValue("email", ENV.DEMO_ADMIN.email);
+                      setValue("password", ENV.DEMO_ADMIN.password);
+                    }}
+                    title="Fill form"
+                    className="h-7 px-2 text-[10px]"
+                  >
+                    Autofill
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="default"
+                    size="xs"
+                    loading={activeDemo === "ADMIN"}
+                    onClick={() => handleDemo("ADMIN")}
+                    className="h-7 px-2.5 text-[11px] bg-purple-600 hover:bg-purple-700 border-purple-600"
+                  >
+                    Login
+                  </Button>
+                </div>
+              </div>
 
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                loading={activeDemo === "TENANT_USER"}
-                onClick={() => handleDemo("TENANT_USER")}
-                leftIcon={<Home className="size-4 text-blue-600" />}
-                className="justify-start text-xs border-blue-200 dark:border-blue-900 hover:bg-blue-50 dark:hover:bg-blue-950/40"
-              >
-                Tenant Demo
-              </Button>
+              {/* Provider Card */}
+              <div className="p-3 rounded-lg border border-emerald-200/80 dark:border-emerald-900/60 bg-emerald-50/40 dark:bg-emerald-950/20 flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <Truck className="size-4 text-emerald-600 shrink-0" />
+                    <span className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                      {ENV.DEMO_PROVIDER.label}
+                    </span>
+                    <Badge variant="tonal-green" size="xs">PROVIDER</Badge>
+                  </div>
+                  <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                    {ENV.DEMO_PROVIDER.email}
+                  </p>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="xs"
+                    onClick={() => {
+                      setValue("email", ENV.DEMO_PROVIDER.email);
+                      setValue("password", ENV.DEMO_PROVIDER.password);
+                    }}
+                    title="Fill form"
+                    className="h-7 px-2 text-[10px]"
+                  >
+                    Autofill
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="default"
+                    size="xs"
+                    loading={activeDemo === "PROVIDER"}
+                    onClick={() => handleDemo("PROVIDER")}
+                    className="h-7 px-2.5 text-[11px] bg-emerald-600 hover:bg-emerald-700 border-emerald-600"
+                  >
+                    Login
+                  </Button>
+                </div>
+              </div>
 
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                loading={activeDemo === "PROVIDER"}
-                onClick={() => handleDemo("PROVIDER")}
-                leftIcon={<Truck className="size-4 text-emerald-600" />}
-                className="sm:col-span-2 justify-start text-xs border-emerald-200 dark:border-emerald-900 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
-              >
-                Provider (Owner / Logistics) Demo
-              </Button>
+              {/* Tenant Card */}
+              <div className="p-3 rounded-lg border border-blue-200/80 dark:border-blue-900/60 bg-blue-50/40 dark:bg-blue-950/20 flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <Home className="size-4 text-blue-600 shrink-0" />
+                    <span className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                      {ENV.DEMO_TENANT.label}
+                    </span>
+                    <Badge variant="tonal-blue" size="xs">TENANT</Badge>
+                  </div>
+                  <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                    {ENV.DEMO_TENANT.email}
+                  </p>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="xs"
+                    onClick={() => {
+                      setValue("email", ENV.DEMO_TENANT.email);
+                      setValue("password", ENV.DEMO_TENANT.password);
+                    }}
+                    title="Fill form"
+                    className="h-7 px-2 text-[10px]"
+                  >
+                    Autofill
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="default"
+                    size="xs"
+                    loading={activeDemo === "TENANT_USER"}
+                    onClick={() => handleDemo("TENANT_USER")}
+                    className="h-7 px-2.5 text-[11px]"
+                  >
+                    Login
+                  </Button>
+                </div>
+              </div>
             </div>
 
             <div className="mt-6 text-center text-xs text-slate-500 dark:text-slate-400">
