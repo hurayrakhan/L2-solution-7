@@ -80,7 +80,7 @@ export default function ProviderProfilePage() {
               <div>
                 <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
                   National ID Verified Provider
-                  <Badge variant="fill-green" className="text-[10px]">VERIFIED</Badge>
+                  <Badge variant="tonal-green" size="xs">Verified</Badge>
                 </h3>
                 <p className="text-xs text-slate-500 mt-0.5">
                   NID: <span className="font-mono font-bold">1992269201827364</span> — Verified by MoveInBD Admin

@@ -197,7 +197,7 @@ export default function HomePage() {
           <div className="container">
             <div className="rounded-3xl bg-gradient-to-r from-slate-900 to-indigo-950 text-white p-8 sm:p-12 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8">
               <div className="space-y-4 max-w-xl">
-                <Badge variant="fill-blue" className="text-xs uppercase">
+                <Badge variant="tonal-blue" size="sm" className="bg-blue-900/60 text-blue-200 border-blue-700/60">
                   Escrow Protection
                 </Badge>
                 <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">

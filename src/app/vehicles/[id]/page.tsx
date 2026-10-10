@@ -115,10 +115,10 @@ export default function VehicleDetailPage() {
 
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <Badge variant="fill-green">
+                  <Badge variant="tonal-green" size="sm">
                     {vehicle.vehicleType.replace("_", " ")}
                   </Badge>
-                  <Badge variant="tonal-blue">
+                  <Badge variant="tonal-blue" size="sm">
                     <ShieldCheck className="size-3 mr-1" /> BRTA Registered & Verified
                   </Badge>
                 </div>

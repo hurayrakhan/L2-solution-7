@@ -164,10 +164,10 @@ export default function PropertyDetailPage() {
             <div className="lg:col-span-2 space-y-8">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <Badge variant="fill-blue" className="text-xs uppercase">
+                  <Badge variant="tonal-blue" size="sm">
                     {property.propertyType}
                   </Badge>
-                  <Badge variant="tonal-green" className="text-xs">
+                  <Badge variant="tonal-green" size="sm">
                     <ShieldCheck className="size-3 mr-1" /> NID Verified Property
                   </Badge>
                 </div>

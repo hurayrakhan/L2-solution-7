@@ -292,7 +292,7 @@ function PropertyListContent() {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute top-3 left-3 flex gap-2">
-                    <Badge variant="fill-blue" className="text-[11px] font-bold">
+                    <Badge variant="tonal-blue" size="xs" className="bg-white/95 dark:bg-slate-900/90 shadow-sm">
                       {property.propertyType.replace("_", " ")}
                     </Badge>
                   </div>

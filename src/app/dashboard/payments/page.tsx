@@ -149,10 +149,11 @@ export default function TenantPaymentsPage() {
                     <TableCell>
                       <Badge
                         variant={p.escrow === "HELD" ? "tonal-blue" : "tonal-green"}
-                        className="text-[10px]"
+                        size="xs"
+                        className="text-[11px] font-semibold"
                       >
                         <ShieldCheck className="size-3 mr-1" />
-                        {p.escrow === "HELD" ? "HELD IN ESCROW" : "RELEASED TO PROVIDER"}
+                        {p.escrow === "HELD" ? "Held in Escrow" : "Released to Provider"}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-slate-400 text-xs">
