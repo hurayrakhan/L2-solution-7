@@ -1,0 +1,935 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+
+
+/* Responsive Grid Layouts: Mobile 375px → 343px, Tablet 768px → 704px, Desktop 1440px → 1280px */
+.container {
+  max-width: 343px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  padding-left: 1rem;    /* 16px */
+  padding-right: 1rem;   /* 16px */
+}
+
+@media (min-width: 768px) {
+  /* Tablet: 768px viewport → 704px container, 32px gutters */
+  .container {
+    max-width: 704px;
+    padding-left: 2rem;    /* 32px */
+    padding-right: 2rem;   /* 32px */
+  }
+}
+
+@media (min-width: 1440px) {
+  /* Desktop: 1440px viewport → 1280px container, 80px margins */
+  .container {
+    max-width: 1280px;
+    padding-left: 5rem;    /* 80px */
+    padding-right: 5rem;   /* 80px */
+  }
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-inter), "Inter", sans-serif;
+  --font-manrope: var(--font-manrope);
+  --font-inter: var(--font-inter);
+  --font-signature: var(--font-caveat);
+  --font-questrial: var(--font-questrial);
+  --font-source-sans: var(--font-source-sans);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-tonal: var(--primary-tonal);
+  --color-primary-container: var(--primary-container);
+
+  /* Primary Chromatic Scale (600 to 50) */
+  --color-primary-600: var(--primary-600);
+  --color-primary-500: var(--primary-500);
+  --color-primary-400: var(--primary-400);
+  --color-primary-300: var(--primary-300);
+  --color-primary-200: var(--primary-200);
+  --color-primary-100: var(--primary-100);
+  --color-primary-50: var(--primary-50);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-foreground: var(--tertiary-foreground);
+
+  /* Semantic Chromatic Scales (600 to 50) */
+  --color-blue-600: #005d97;
+  --color-blue-500: #0077c0;
+  --color-blue-400: #268cd4;
+  --color-blue-300: #6cb5e6;
+  --color-blue-200: #a3d4f2;
+  --color-blue-100: #ebf4fa;
+  --color-blue-50: #f7fbfd;
+
+  --color-red-600: #981515;
+  --color-red-500: #ba1a1a;
+  --color-red-400: #d33b3b;
+  --color-red-300: #e56868;
+  --color-red-200: #f19b9b;
+  --color-red-100: #ffdad6;
+  --color-red-50: #fff1f0;
+
+  --color-error-600: #981515;
+  --color-error-500: #ba1a1a;
+  --color-error-400: #d33b3b;
+  --color-error-300: #e56868;
+  --color-error-200: #f19b9b;
+  --color-error-100: #ffdad6;
+  --color-error-50: #fff1f0;
+
+  --color-orange-600: #c74b0a;
+  --color-orange-500: #ea580c;
+  --color-orange-400: #ee6d29;
+  --color-orange-300: #f38850;
+  --color-orange-200: #f8af88;
+  --color-orange-100: #fdf3ee;
+  --color-orange-50: #fefcfa;
+
+  --color-warning-600: #c74b0a;
+  --color-warning-500: #ea580c;
+  --color-warning-400: #ee6d29;
+  --color-warning-300: #f38850;
+  --color-warning-200: #f8af88;
+  --color-warning-100: #fdf3ee;
+  --color-warning-50: #fefcfa;
+
+  --color-yellow-600: #ca9b07;
+  --color-yellow-500: #eab308;
+  --color-yellow-400: #facc15;
+  --color-yellow-300: #fde047;
+  --color-yellow-200: #fef08a;
+  --color-yellow-100: #fefce8;
+  --color-yellow-50: #fffef5;
+
+  --color-green-600: #0ea06f;
+  --color-green-500: #10b981;
+  --color-green-400: #34d399;
+  --color-green-300: #6ee7b7;
+  --color-green-200: #a7f3d0;
+  --color-green-100: #ecfdf5;
+  --color-green-50: #fafffd;
+
+  --color-success-600: #0ea06f;
+  --color-success-500: #10b981;
+  --color-success-400: #34d399;
+  --color-success-300: #6ee7b7;
+  --color-success-200: #a7f3d0;
+  --color-success-100: #ecfdf5;
+  --color-success-50: #fafffd;
+
+  --color-purple-600: #5829a8;
+  --color-purple-500: #7c3aed;
+  --color-purple-400: #8e54f0;
+  --color-purple-300: #a678f3;
+  --color-purple-200: #c6a8f7;
+  --color-purple-100: #f3effd;
+  --color-purple-50: #fcfafe;
+
+  --color-slate-900: #0f172a;
+  --color-slate-800: #1e293b;
+  --color-slate-700: #334155;
+  --color-slate-600: #475569;
+  --color-slate-500: #64748b;
+  --color-slate-400: #94a3b8;
+  --color-slate-300: #cbd5e1;
+  --color-slate-200: #e2e8f0;
+  --color-slate-100: #f1f5f9;
+  --color-slate-50: #f8fafc;
+
+  --color-grey-900: #0f172a;
+  --color-grey-800: #1e293b;
+  --color-grey-700: #334155;
+  --color-grey-600: #475569;
+  --color-grey-500: #64748b;
+  --color-grey-400: #94a3b8;
+  --color-grey-300: #cbd5e1;
+  --color-grey-200: #e2e8f0;
+  --color-grey-100: #f1f5f9;
+  --color-grey-50: #f8fafc;
+  --color-grey-0: #ffffff;
+
+  --color-surface: var(--surface);
+  --color-on-surface: var(--on-surface);
+  --color-on-surface-variant: var(--on-surface-variant);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+  
+  --color-outline-variant: var(--outline-variant);
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-blanket: var(--blanket);
+
+  --radius: 0.25rem;
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+
+  --shadow-modal: var(--shadow-modal);
+  --shadow-modal-tinted: var(--shadow-modal-tinted);
+  --shadow-dropdown: var(--shadow-modal-tinted);
+
+  --spacing-1: 0.25rem; /* 4px (space.050) */
+  --spacing-2: 0.5rem;  /* 8px (space.100) */
+  --spacing-3: 0.75rem; /* 12px (space.150) */
+  --spacing-4: 1rem;    /* 16px (space.200) */
+  --spacing-5: 1.25rem; /* 20px */
+  --spacing-6: 1.5rem;  /* 24px */
+  --spacing-8: 2rem;    /* 32px */
+  --spacing-10: 2.5rem;  /* 40px */
+  --spacing-12: 3rem;    /* 48px */
+  --spacing-16: 4rem;    /* 64px */
+  --spacing-20: 5rem;    /* 80px */
+  --spacing-24: 6rem;    /* 96px */
+  --spacing-32: 8rem;    /* 128px */
+  --spacing-40: 10rem;   /* 160px */
+  --spacing-48: 12rem;   /* 192px */
+  --spacing-56: 14rem;   /* 224px */
+  --spacing-64: 16rem;   /* 256px */
+  
+  /* Elevation Tokens (Drop Shadows) */
+  --shadow-level-1: 0px 1px 1px 0px rgba(0, 0, 0, 0.04), 0px 2px 1px 0px rgba(0, 0, 0, 0.01);
+  --shadow-level-2: 0px 1px 1px 0px rgba(64, 64, 64, 0.04), 0px 3px 2px 0px rgba(64, 64, 64, 0.03), 0px 5px 2px 0px rgba(64, 64, 64, 0.01);
+  --shadow-level-3: 0px 1px 2px 0px rgba(64, 64, 64, 0.05), 0px 4px 4px 0px rgba(64, 64, 64, 0.04), 0px 8px 5px 0px rgba(64, 64, 64, 0.03), 0px 14px 6px 0px rgba(64, 64, 64, 0.01);
+  --shadow-level-4: 0px 4px 9px 0px rgba(0, 0, 0, 0.04), 0px 17px 17px 0px rgba(0, 0, 0, 0.03), 0px 38px 23px 0px rgba(0, 0, 0, 0.02), 0px 67px 27px 0px rgba(0, 0, 0, 0.01);
+  --shadow-modal: 0px 4px 9px 0px rgba(0, 0, 0, 0.04), 0px 17px 17px 0px rgba(0, 0, 0, 0.03), 0px 38px 23px 0px rgba(0, 0, 0, 0.02), 0px 67px 27px 0px rgba(0, 0, 0, 0.01), 0px 105px 29px 0px rgba(0, 0, 0, 0);
+  --shadow-modal-tinted: 0px 4px 9px 0px rgba(38, 140, 212, 0.04), 0px 17px 17px 0px rgba(38, 140, 212, 0.03), 0px 38px 23px 0px rgba(38, 140, 212, 0.02), 0px 67px 27px 0px rgba(38, 140, 212, 0.01), 0px 105px 29px 0px rgba(38, 140, 212, 0);
+  --shadow-ambient: 0 12px 40px rgba(25, 27, 35, 0.06);
+
+  /* Typographic Scale Utility Classes */
+  --text-display-1: 4rem; /* 64px */
+  --text-display-1--line-height: 4.4rem; /* 70.4px (110%) */
+  --text-display-2: 3rem; /* 48px */
+  --text-display-2--line-height: 3.3rem; /* 52.8px (110%) */
+  --text-display-3: 2.25rem; /* 36px */
+  --text-display-3--line-height: 2.475rem; /* 39.6px (110%) */
+  --text-display-4: 1.75rem; /* 28px */
+  --text-display-4--line-height: 1.925rem; /* 30.8px (110%) */
+  --text-display-5: 1.5rem; /* 24px */
+  --text-display-5--line-height: 1.65rem; /* 26.4px (110%) */
+  --text-display-6: 1.25rem; /* 20px */
+  --text-display-6--line-height: 1.375rem; /* 22px (110%) */
+  --text-display-7: 1.125rem; /* 18px */
+  --text-display-7--line-height: 1.2375rem; /* 19.8px (110%) */
+  --text-display-8: 1rem; /* 16px */
+  --text-display-8--line-height: 1.1rem; /* 17.6px (110%) */
+  --text-display-9: 0.875rem; /* 14px */
+  --text-display-9--line-height: 0.9625rem; /* 15.4px (110%) */
+
+  --text-body-1: 1rem; /* 16px */
+  --text-body-1--line-height: 1.4rem; /* 22.4px (140%) */
+  --text-body-2: 0.875rem; /* 14px */
+  --text-body-2--line-height: 1.225rem; /* 19.6px (140%) */
+  --text-body-3: 0.75rem; /* 12px */
+  --text-body-3--line-height: 1.05rem; /* 16.8px (140%) */
+
+  --text-btn-1: 1rem; /* 16px */
+  --text-btn-1--line-height: 1.5rem; /* 24px */
+  --text-btn-2: 0.875rem; /* 14px */
+  --text-btn-2--line-height: 1.25rem; /* 20px */
+}
+
+:root {
+  --background: #F8FAFC;
+  --foreground: #0F172A;
+  
+  --primary: #0077c0;
+  --primary-hover: #005d97;
+  --primary-tonal: #ebf4fa;
+  --primary-foreground: #ffffff;
+  --primary-container: #1e3a6e;
+
+  /* Primary Chromatic Scale (600 to 50) */
+  --primary-600: #005d97;
+  --primary-500: #0077c0;
+  --primary-400: #268cd4;
+  --primary-300: #6cb5e6;
+  --primary-200: #a3d4f2;
+  --primary-100: #ebf4fa;
+  --primary-50: #f7fbfd;
+
+  --secondary: #475569;
+  --secondary-foreground: #ffffff;
+
+  --tertiary: #10B981;
+  --tertiary-foreground: #ffffff;
+
+  --surface: #F8FAFC;
+  --on-surface: #0F172A;
+  --on-surface-variant: #475569;
+  --surface-container-low: #F1F5F9;
+  --surface-container-lowest: #ffffff;
+  --surface-container-high: #E2E8F0;
+  --surface-container-highest: #CBD5E1;
+  
+  --outline-variant: #CBD5E1;
+
+  --card: #ffffff;
+  --card-foreground: #0F172A;
+  --popover: #ffffff;
+  --popover-foreground: #0F172A;
+  
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
+  
+  --accent: #EBF4FA;
+  --accent-foreground: #0077c0;
+  
+  --destructive: #BA1A1A;
+  --destructive-foreground: #ffffff;
+  
+  --border: #CBD5E1;
+  --input: #CBD5E1;
+  --ring: #0077c0;
+  
+  --radius: 0.25rem;
+
+  /* Blanket / Modal Overlay Token (Figma 9224:25017: #050C1F at 46% opacity) */
+  --blanket: rgba(5, 12, 31, 0.46);
+
+  /* Gradient Utility Tokens - linear gradient from navy to vibrant ocean blue */
+  --primary-gradient: linear-gradient(135deg, #1e3a6e 0%, #0077c0 100%);
+}
+
+.dark {
+  --background: #0B1329;
+  --foreground: #F8FAFC;
+  
+  --primary: #38BDF8;
+  --primary-foreground: #0B1329;
+  
+  --surface: #0E1A35;
+  --on-surface: #F8FAFC;
+  --on-surface-variant: #94A3B8;
+  --surface-container-low: #142247;
+  --surface-container-lowest: #0B1329;
+
+  --card: #0E1A35;
+  --card-foreground: #F8FAFC;
+  
+  --border: #1E2A4A;
+  --input: #1E2A4A;
+  --destructive: oklch(0.704 0.191 22.216);
+  --ring: #38BDF8;
+
+  --blanket: rgba(5, 12, 31, 0.72);
+}
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Global Root Scrollbar Styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--on-surface-variant);
+  }
+
+
+  /* Modal scroll lock solution: Hide background scrollbars while preventing page content jump */
+  html:has(body[data-scroll-locked]),
+  body[data-scroll-locked],
+  body[data-scroll-locked] main {
+    overflow: hidden !important;
+  }
+
+  body[data-scroll-locked] {
+    margin-right: 0px !important;
+    padding-right: 0px !important;
+    --removed-body-scroll-bar-size: 0px !important;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 9999px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: var(--on-surface-variant);
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .bg-primary-gradient {
+    background: var(--primary-gradient);
+  }
+
+  /* Design System Typography Utility Classes */
+  /* Design System Typography Utility Classes */
+  /* Heading Scale — Inter, Bold (700), 110% line-height, 0 letter-spacing */
+  .font-heading-1, .font-display-1 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 64px; line-height: 1.1; font-weight: 700; letter-spacing: 0; }
+  .font-heading-2, .font-display-2 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 48px; line-height: 1.1; font-weight: 700; letter-spacing: 0; }
+  .font-heading-3, .font-display-3 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 36px; line-height: 1.1; font-weight: 700; letter-spacing: 0; }
+  .font-heading-4, .font-display-4 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 28px; line-height: 1.1; font-weight: 700; letter-spacing: 0; }
+  .font-heading-5, .font-display-5 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 24px; line-height: 1.1; font-weight: 700; letter-spacing: 0; }
+  .font-heading-6, .font-display-6 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 20px; line-height: 1.1; font-weight: 700; letter-spacing: 0; }
+  .font-heading-7, .font-display-7 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 18px; line-height: 1.1; font-weight: 700; letter-spacing: 0; }
+  .font-heading-8, .font-display-8 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 16px; line-height: 1.1; font-weight: 700; letter-spacing: 0; }
+  .font-heading-9, .font-display-9 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 14px; line-height: 1.1; font-weight: 700; letter-spacing: 0; }
+
+  /* Paragraph Scale — Inter, Regular (400), 140% line-height, 0 letter-spacing */
+  .font-paragraph-1, .font-body-1 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 16px; line-height: 1.4; font-weight: 400; }
+  .font-paragraph-2, .font-body-2 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 14px; line-height: 1.4; font-weight: 400; }
+  .font-paragraph-3, .font-body-3 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 12px; line-height: 1.4; font-weight: 400; }
+
+  /* Link Scale — Inter, Regular (400), 140% line-height */
+  .font-link-1 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 16px; line-height: 1.4; font-weight: 400; }
+  .font-link-2 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 14px; line-height: 1.4; font-weight: 400; }
+
+  /* Button Scale — Inter, Bold (700) */
+  .font-btn-1 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 16px; line-height: 24px; font-weight: 700; letter-spacing: 0.01em; }
+  .font-btn-2 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 14px; line-height: 20px; font-weight: 700; letter-spacing: 0.01em; }
+
+  /* Button Label Scale — Inter, Semi-bold (600), 4% letter-spacing */
+  .font-btn-label-1 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 0.04em; }
+  .font-btn-label-2 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.04em; }
+
+  /* Tag Scale — Inter, Semi-bold (600), varied letter-spacing */
+  .font-tag-1 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 0.08em; }
+  .font-tag-2 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.08em; }
+  .font-tag-3 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 12px; font-weight: 600; line-height: 18px; letter-spacing: 0.08em; }
+  .font-tag-4 { font-family: var(--font-inter), "Inter", sans-serif; font-size: 10px; font-weight: 600; line-height: 18px; letter-spacing: 0.04em; }
+
+  .glass {
+    @apply bg-white/40 backdrop-blur-[24px] border border-white/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)];
+  }
+
+  .glass-dark {
+    @apply bg-black/20 backdrop-blur-[24px] border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
+  }
+
+  /* Business Class Surface layering */
+  .surface-premium {
+    @apply bg-surface-container-lowest border border-surface-container-high shadow-ambient;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--primary-gradient);
+  }
+
+  /* Tonal Layering Utilities */
+  .surface-layer-0 { @apply bg-surface; }
+  .surface-layer-1 { @apply bg-surface-container-low; }
+  .surface-layer-2 { @apply bg-surface-container-lowest; }
+  .surface-layer-3 { @apply bg-surface-container-high; }
+
+  @keyframes progress-scan {
+    0% { left: -40%; }
+    100% { left: 100%; }
+  }
+
+  .animate-progress {
+    @apply relative overflow-hidden bg-primary/10 backdrop-blur-md h-full w-full;
+  }
+
+  .animate-progress::after {
+    content: "";
+    @apply absolute top-0 bottom-0 bg-primary/60;
+    width: 40%;
+    filter: blur(4px);
+    animation: progress-scan 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+
+  @keyframes shimmer {
+    100% { transform: translateX(100%); }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 1.5s infinite;
+  }
+}
+
+/* TipTap Editor Styling */
+.ProseMirror {
+  outline: none;
+  overflow-wrap: break-word;
+}
+
+.ProseMirror p {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.ProseMirror h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.ProseMirror h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.25;
+}
+
+.ProseMirror h3 {
+  font-size: 1.375rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.ProseMirror ul {
+  list-style-type: disc !important;
+  padding-left: 1.75rem !important;
+  margin-bottom: 1rem !important;
+  display: block !important;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal !important;
+  padding-left: 1.75rem !important;
+  margin-bottom: 1rem !important;
+  display: block !important;
+}
+
+.ProseMirror li {
+  margin-bottom: 0.375rem;
+  display: list-item !important;
+}
+
+.ProseMirror blockquote {
+  border-left: 4px solid var(--primary);
+  padding-left: 1.25rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: var(--muted-foreground);
+}
+
+.ProseMirror hr {
+  border: 0;
+  border-top: 2px solid var(--border);
+  margin: 2rem 0;
+}
+
+/* TipTap Highlight / Mark Styling */
+mark {
+  background-color: #FEF08A;
+  color: inherit;
+  padding: 0.1em 0.25em;
+  border-radius: 0.2em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.ProseMirror mark {
+  color: inherit;
+}
+
+/* Table Styling for TipTap */
+.ProseMirror table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 1.5rem 0;
+  overflow: hidden;
+}
+
+.ProseMirror td,
+.ProseMirror th {
+  min-width: 1em;
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  vertical-align: top;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.ProseMirror th {
+  font-weight: bold;
+  text-align: left;
+  background-color: var(--surface-container-low);
+}
+
+.ProseMirror .selectedCell:after {
+  z-index: 2;
+  position: absolute;
+  content: "";
+  left: 0; right: 0; top: 0; bottom: 0;
+  background: rgba(0, 119, 192, 0.08);
+  pointer-events: none;
+}
+
+.ProseMirror .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  z-index: 20;
+  background-color: var(--primary);
+  pointer-events: none;
+}
+
+/* tiptap-pagination-plus — Multi-page styling */
+.ProseMirror .pagination-break-wrapper {
+  pointer-events: none;
+  user-select: none;
+}
+/* Let TipTap Pagination Plus in-flow sizing and padding handle A4 canvas spacing natively */
+.ProseMirror.rm-with-pagination {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+
+.ProseMirror .rm-page-break {
+  position: relative !important;
+  overflow: visible !important;
+}
+
+/* First page pagination positioning (in-flow at the very top of Page 1) */
+.ProseMirror .rm-first-page-header {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Subsequent pages header positioning (in-flow top margin) */
+.ProseMirror .rm-page-header:not(.rm-first-page-header) {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Unified footer positioning (in-flow bottom margin) */
+.ProseMirror .rm-page-footer {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Align contents to the right */
+.ProseMirror .rm-page-header-content,
+.ProseMirror .rm-page-footer-content {
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+.ProseMirror .rm-page-header-left,
+.ProseMirror .rm-page-header-right,
+.ProseMirror .rm-page-footer-left,
+.ProseMirror .rm-page-footer-right {
+  float: none !important;
+}
+
+.ProseMirror .rm-page-header-right,
+.ProseMirror .rm-page-footer-right {
+  margin-right: var(--rm-margin-right, 50px) !important;
+}
+
+.ProseMirror .rm-page-header-left,
+.ProseMirror .rm-page-footer-left {
+  margin-left: var(--rm-margin-left, 50px) !important;
+}
+
+.ProseMirror .rm-page-header-right,
+.ProseMirror .rm-page-footer-right {
+  font-size: 10px !important;
+  color: #94a3b8 !important;
+  font-family: 'Manrope', sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+}
+
+.ProseMirror .rm-page-header-left:empty,
+.ProseMirror .rm-page-footer-left:empty {
+  display: none !important;
+}
+
+/* @tiptap-extend/columns — Grid column layout */
+.ProseMirror .column-block {
+  width: 100%;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 24px;
+  padding: 4px 0;
+  margin-bottom: 0.75rem;
+}
+
+.ProseMirror .column {
+  overflow: hidden;
+  padding: 2px 4px;
+  min-height: 24px;
+  box-sizing: border-box;
+}
+
+/* Remove bottom margin on last child element inside column to prevent bottom padding gap */
+.ProseMirror .column > *:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Optional border attribute support */
+.ProseMirror .column-block[data-border="true"] .column {
+  border: 1px solid var(--border, #cbd5e1);
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+/* Light outline in editor focus mode only for visual alignment guidance */
+.ProseMirror-focused .column {
+  outline: 1px dashed rgba(203, 213, 225, 0.4);
+  outline-offset: -1px;
+  border-radius: 4px;
+}
+
+.ProseMirror-focused .column-block[data-border="true"] .column {
+  outline: none;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--muted-foreground);
+  pointer-events: none;
+  height: 0;
+}
+
+.ProseMirror p:empty::before,
+.ProseMirror h1:empty::before,
+.ProseMirror h2:empty::before,
+.ProseMirror h3:empty::before,
+.ProseMirror h4:empty::before,
+.ProseMirror h5:empty::before,
+.ProseMirror h6:empty::before {
+  content: "\00a0" !important;
+}
+
+/* Custom Scrollbar for Editor Canvas */
+.editor-canvas-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.editor-canvas-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 9999px;
+}
+
+.editor-canvas-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+  border: 2.5px solid #f1f5f9;
+}
+.editor-canvas-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Legal Document Styles */
+.legal-content {
+  font-family: var(--font-sans), sans-serif;
+}
+
+.legal-content h2 {
+  font-family: var(--font-manrope), var(--font-sans), sans-serif;
+  font-size: 1.75rem; /* 28px */
+  font-weight: 800; /* Bolder */
+  color: #0f172a; /* text-zinc-900 */
+  margin-top: 4.75rem; /* Increased gap between sections */
+  margin-bottom: 1.5rem;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
+}
+
+.legal-content h3 {
+  font-family: var(--font-manrope), var(--font-sans), sans-serif;
+  font-size: 1.25rem; /* 20px */
+  font-weight: 700; /* Bold */
+  color: #1e293b; /* text-zinc-800 */
+  margin-top: 1.75rem; /* Decreased subsection top gap */
+  margin-bottom: 0.625rem; /* Decreased bottom gap */
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+}
+
+.legal-content p {
+  font-size: 1.05rem; /* Increased body text size slightly */
+  line-height: 1.7;
+  color: #334155; /* text-zinc-700 */
+  margin-bottom: 1.25rem;
+}
+
+.legal-content ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.legal-content li {
+  font-size: 1.05rem; /* Increased list item text size */
+  line-height: 1.68;
+  color: #334155;
+  margin-bottom: 0.5rem;
+}
+
+/* Custom Template Preview Dynamic Fields Styling */
+.template-preview-container span[data-field-id] {
+  visibility: hidden;
+  position: relative;
+  display: inline-flex;
+  margin: 0 2px;
+  vertical-align: middle;
+}
+
+.template-preview-container span[data-field-id]::after {
+  content: attr(data-label);
+  visibility: visible;
+  display: inline-flex;
+  align-items: center;
+  background-color: rgba(0, 119, 192, 0.1);
+  color: #0077c0;
+  border: 1px solid rgba(0, 119, 192, 0.2);
+  border-radius: 6px;
+  padding: 1px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: "Manrope", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+/* TipTap and Preview Text Highlight Styling */
+mark,
+.ProseMirror mark,
+.preview-mode-html mark {
+  background-color: #FEF08A;
+  color: inherit;
+  padding: 1px 3px;
+  border-radius: 2px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+mark[data-color="transparent"],
+.ProseMirror mark[data-color="transparent"],
+.preview-mode-html mark[data-color="transparent"] {
+  background-color: transparent !important;
+}
+
+/* ==========================================================================
+   Document Preview Modal & PDF Canvas Styling 
+   ========================================================================== */
+.document-preview-modal .react-pdf__Document {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.document-preview-modal .react-pdf__Page {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+  position: relative !important;
+  background-color: transparent !important;
+  box-sizing: border-box !important;
+}
+
+.document-preview-modal .react-pdf__Page canvas {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+}
+
+.document-preview-modal .react-pdf__Page__textLayer {
+  display: none !important;
+}
+
+.document-preview-modal .react-pdf__Page__annotations {
+  display: none !important;
+}
+
+.document-preview-modal .document-preview-content .tiptap.ProseMirror {
+  padding-top: 16px !important;
+  min-height: auto !important;
+}
+
+.document-preview-modal .document-preview-content .rm-page-header,
+.document-preview-modal .document-preview-content .rm-first-page-header {
+  display: none !important;
+}
