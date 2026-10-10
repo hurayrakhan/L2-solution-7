@@ -23,6 +23,7 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Pagination } from "@/components/ui/pagination";
+import { EmptyState } from "@/components/ui/empty-state";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 interface ResourceItem {
@@ -156,11 +157,26 @@ export default function AdminManagePage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filtered.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell className="font-bold text-foreground">
-                {item.title}
+          {filtered.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={7} className="h-64 text-center">
+                <EmptyState
+                  title="No resources found"
+                  description="Try adjusting your search query or switching categories."
+                  actionLabel="Clear Filters"
+                  onAction={() => {
+                    setActiveTab("ALL");
+                    setSearch("");
+                  }}
+                />
               </TableCell>
+            </TableRow>
+          ) : (
+            filtered.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell className="font-bold text-foreground">
+                  {item.title}
+                </TableCell>
               <TableCell>
                 <Badge variant={item.category === "PROPERTY" ? "tonal-blue" : "tonal-green"}>
                   {item.type}
@@ -208,7 +224,7 @@ export default function AdminManagePage() {
                 </div>
               </TableCell>
             </TableRow>
-          ))}
+          )))}
         </TableBody>
       </Table>
 

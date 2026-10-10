@@ -19,6 +19,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@
 import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
 
 const MOCK_PAYMENTS = [
   {
@@ -132,11 +133,23 @@ export default function TenantPaymentsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {MOCK_PAYMENTS.map((p) => (
-                  <TableRow key={p.id}>
-                    <TableCell className="font-bold text-foreground">
-                      {p.purpose}
+                {MOCK_PAYMENTS.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={6} className="h-48 text-center">
+                      <EmptyState
+                        title="No payment records yet"
+                        description="Your escrow deposits and mess utility payments will appear here."
+                        actionLabel="Browse Properties"
+                        actionHref="/properties"
+                      />
                     </TableCell>
+                  </TableRow>
+                ) : (
+                  MOCK_PAYMENTS.map((p) => (
+                    <TableRow key={p.id}>
+                      <TableCell className="font-bold text-foreground">
+                        {p.purpose}
+                      </TableCell>
                     <TableCell>
                       <Badge variant="tonal-gray">{p.method}</Badge>
                     </TableCell>
@@ -160,7 +173,7 @@ export default function TenantPaymentsPage() {
                       {p.date}
                     </TableCell>
                   </TableRow>
-                ))}
+                )))}
               </TableBody>
             </Table>
           </CardContent>

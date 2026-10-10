@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { StatCard } from "@/components/ui/stat-card";
+import { EmptyState } from "@/components/ui/empty-state";
 import { useAuth } from "@/contexts/auth-context";
 
 export default function TenantDashboardPage() {
@@ -93,9 +94,17 @@ export default function TenantDashboardPage() {
             </CardHeader>
 
             <CardContent className="p-0 space-y-4">
-              {myBookings.map((b) => (
-                <div
-                  key={b.id}
+              {myBookings.length === 0 ? (
+                <EmptyState
+                  title="No active bookings yet"
+                  description="Browse verified apartments, bachelor seats, or moving trucks to make your first reservation."
+                  actionLabel="Explore Properties"
+                  actionHref="/properties"
+                />
+              ) : (
+                myBookings.map((b) => (
+                  <div
+                    key={b.id}
                   className="p-4 rounded-xl border border-border bg-slate-50/50 dark:bg-slate-900/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                 >
                   <div className="space-y-1">
@@ -123,7 +132,7 @@ export default function TenantDashboardPage() {
                     </Badge>
                   </div>
                 </div>
-              ))}
+              )))}
             </CardContent>
           </Card>
         </div>
