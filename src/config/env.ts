@@ -4,7 +4,7 @@
  */
 
 export const ENV = {
-  API_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1",
+  API_URL: process.env.NEXT_PUBLIC_API_URL || "https://l2-solution-6.vercel.app/api/v1",
   
   // Evaluation One-Click Demo Credentials
   DEMO_ADMIN: {

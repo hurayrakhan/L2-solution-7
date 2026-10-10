@@ -12,7 +12,14 @@ export interface User {
   updatedAt: string;
 }
 
-export type PropertyType = "APARTMENT" | "SINGLE_ROOM" | "SHARED_ROOM" | "SUBLET" | "HOSTEL";
+export type PropertyType =
+  | "FLAT"
+  | "SUBLET"
+  | "MESS"
+  | "APARTMENT"
+  | "SINGLE_ROOM"
+  | "SHARED_ROOM"
+  | "HOSTEL";
 
 export interface Property {
   id: string;
@@ -24,36 +31,57 @@ export interface Property {
   bedrooms: number;
   bathrooms: number;
   sizeSqFt?: number;
-  isFurnished: boolean;
+  isFurnished?: boolean;
   address: string;
   city: string;
   area: string;
-  images: string[];
+  images?: string[];
   isAvailable: boolean;
-  ownerId: string;
+  landlordId?: string;
+  landlord?: {
+    id: string;
+    name: string;
+    email: string;
+    phone?: string;
+  };
+  ownerId?: string;
   owner?: User;
   createdAt: string;
   updatedAt: string;
 }
 
-export type VehicleType = "PICKUP_TRUCK" | "COVERED_VAN" | "OPEN_TRUCK" | "MICROBUS";
+export type VehicleType =
+  | "PICKUP_TRUCK"
+  | "COVERED_VAN"
+  | "OPEN_TRUCK"
+  | "MICROBUS"
+  | "PASSENGER_CAR";
 
 export interface Vehicle {
   id: string;
   title: string;
-  model: string;
+  model?: string;
   licensePlate: string;
   vehicleType: VehicleType;
-  capacityTon: number;
-  baseFare: number;
+  capacity?: string;
+  capacityTon?: number;
+  hourlyRate?: number;
+  baseFare?: number;
   perKmRate: number;
   driverName?: string;
   driverPhone?: string;
-  city: string;
+  city?: string;
   isAvailable: boolean;
-  providerId: string;
+  ownerId?: string;
+  owner?: {
+    id: string;
+    name: string;
+    email: string;
+    phone?: string;
+  };
+  providerId?: string;
   provider?: User;
-  images: string[];
+  images?: string[];
   createdAt: string;
   updatedAt: string;
 }

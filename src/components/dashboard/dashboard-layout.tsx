@@ -87,6 +87,7 @@ export function DashboardLayout({ children, title, subtitle }: DashboardLayoutPr
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="p-1.5 rounded-lg text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800"
+          aria-label="Toggle Dashboard Sidebar"
         >
           {sidebarOpen ? <X className="size-5" /> : <Menu className="size-5" />}
         </button>

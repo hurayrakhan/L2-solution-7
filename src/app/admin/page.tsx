@@ -11,6 +11,7 @@ import {
   ArrowUpRight,
   DollarSign,
   Activity,
+  RefreshCw,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -28,7 +29,10 @@ import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
 import { StatCard } from "@/components/ui/stat-card";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/status-badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { fetcher } from "@/lib/fetcher";
 
 const MONTHLY_REVENUE_DATA = [
   { month: "Nov", revenue: 145000, bookings: 32 },
@@ -39,64 +43,102 @@ const MONTHLY_REVENUE_DATA = [
   { month: "Apr", revenue: 465000, bookings: 110 },
 ];
 
-const RECENT_ACTIVITIES = [
-  {
-    id: "act-1",
-    user: "Tariqul Islam (Owner)",
-    action: "Listed new 3BHK Apartment in Gulshan-2",
-    time: "10 mins ago",
-    status: "VERIFIED",
-  },
-  {
-    id: "act-2",
-    user: "Tanvir Ahmed (Tenant)",
-    action: "Reserved Pickup Truck (Tata Ace) - Fare ৳1,850",
-    time: "25 mins ago",
-    status: "CONFIRMED",
-  },
-  {
-    id: "act-3",
-    user: "Mizanur Rahman (Driver)",
-    action: "Requested NID Provider Verification approval",
-    time: "1 hour ago",
-    status: "PENDING",
-  },
-  {
-    id: "act-4",
-    user: "Sadia Sultana (Tenant)",
-    action: "Paid Mess Utility share ৳1,420 via SSLCommerz",
-    time: "2 hours ago",
-    status: "COMPLETED",
-  },
-];
+interface AdminStats {
+  totalUsers: number;
+  totalProperties: number;
+  totalVehicles: number;
+  totalBookings: number;
+  totalRevenue: number;
+  successfulPaymentsCount: number;
+}
+
+interface AuditLogItem {
+  id: string;
+  action: string;
+  entity: string;
+  entityId: string;
+  details: string;
+  createdAt: string;
+  user?: {
+    name: string;
+    email: string;
+    role: string;
+  };
+}
 
 export default function AdminDashboardPage() {
+  const [stats, setStats] = React.useState<AdminStats | null>(null);
+  const [auditLogs, setAuditLogs] = React.useState<AuditLogItem[]>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  const loadAdminData = React.useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const [statsRes, logsRes] = await Promise.allSettled([
+        fetcher<AdminStats>("/admin/dashboard-stats"),
+        fetcher<AuditLogItem[]>("/admin/audit-logs"),
+      ]);
+
+      if (statsRes.status === "fulfilled" && statsRes.value) {
+        setStats(statsRes.value);
+      }
+      if (logsRes.status === "fulfilled" && Array.isArray(logsRes.value)) {
+        setAuditLogs(logsRes.value);
+      }
+    } catch (err) {
+      console.warn("Admin dashboard load note:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    loadAdminData();
+  }, [loadAdminData]);
+
+  const totalUsersDisplay = stats ? stats.totalUsers.toLocaleString() : "4";
+  const totalPropertiesDisplay = stats ? stats.totalProperties.toLocaleString() : "3";
+  const totalVehiclesDisplay = stats ? stats.totalVehicles.toLocaleString() : "3";
+  const totalRevenueDisplay = stats ? `৳${stats.totalRevenue.toLocaleString()}` : "৳5,500";
+
   return (
     <DashboardLayout
       title="Admin Analytics & Platform Overview"
       subtitle="Real-time performance metrics, financial escrow totals, and system logs across Bangladesh."
     >
+      {/* Header controls */}
+      <div className="flex justify-end mb-4">
+        <Button
+          size="xs"
+          variant="outline"
+          onClick={() => loadAdminData()}
+          leftIcon={<RefreshCw className="size-3" />}
+        >
+          Refresh Live Metrics
+        </Button>
+      </div>
+
       {/* Top Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
         <StatCard
           title="Total Escrow Revenue"
-          value="৳46.5L"
+          value={totalRevenueDisplay}
           change="+28.4%"
           isPositive
-          subtitle="Monthly volume"
+          subtitle="Processed in database"
           icon={<DollarSign className="size-5" />}
         />
         <StatCard
-          title="Active Listings"
-          value="5,240"
+          title="Active Properties"
+          value={totalPropertiesDisplay}
           change="+14.2%"
           isPositive
-          subtitle="Flats, sublets & rooms"
+          subtitle="Flats, sublets & mess seats"
           icon={<Building className="size-5" />}
         />
         <StatCard
           title="Moving Fleet Vehicles"
-          value="1,280"
+          value={totalVehiclesDisplay}
           change="+8.5%"
           isPositive
           subtitle="Registered pickups & vans"
@@ -104,10 +146,10 @@ export default function AdminDashboardPage() {
         />
         <StatCard
           title="Registered Users"
-          value="34,890"
+          value={totalUsersDisplay}
           change="+19.1%"
           isPositive
-          subtitle="Tenants & Providers"
+          subtitle="Tenants, Providers & Admins"
           icon={<Users className="size-5" />}
         />
       </div>
@@ -204,20 +246,48 @@ export default function AdminDashboardPage() {
         <CardHeader className="p-0 pb-4">
           <CardTitle className="text-base">Recent Platform Activity & Audit Stream</CardTitle>
           <CardDescription className="text-xs">
-            Live system transactions, listings, and identity requests
+            Live system transactions, listings, and identity requests from database audit log
           </CardDescription>
         </CardHeader>
         <CardContent className="p-0 divide-y divide-border">
-          {RECENT_ACTIVITIES.map((act) => (
-            <div key={act.id} className="py-3.5 flex items-center justify-between text-xs">
-              <div>
-                <span className="font-bold text-foreground mr-2">{act.user}:</span>
-                <span className="text-slate-600 dark:text-slate-300">{act.action}</span>
-                <span className="text-slate-400 ml-2">({act.time})</span>
-              </div>
-              <StatusBadge status={act.status} />
+          {isLoading ? (
+            <div className="p-4 space-y-3">
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-full" />
             </div>
-          ))}
+          ) : auditLogs.length === 0 ? (
+            <div className="p-6 text-center text-xs text-slate-500">
+              No audit records retrieved yet.
+            </div>
+          ) : (
+            auditLogs.map((act) => {
+              const userName = act.user?.name || act.user?.email || "System User";
+              const timeStr = act.createdAt
+                ? new Date(act.createdAt).toLocaleString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                : "Just now";
+
+              return (
+                <div key={act.id} className="py-3.5 flex items-center justify-between text-xs">
+                  <div>
+                    <span className="font-bold text-foreground mr-2">{userName}:</span>
+                    <span className="text-slate-600 dark:text-slate-300">
+                      {act.details || act.action}
+                    </span>
+                    <span className="text-slate-400 ml-2">({timeStr})</span>
+                  </div>
+                  <Badge variant="tonal-blue" size="xs">
+                    {act.action}
+                  </Badge>
+                </div>
+              );
+            })
+          )}
         </CardContent>
       </Card>
     </DashboardLayout>

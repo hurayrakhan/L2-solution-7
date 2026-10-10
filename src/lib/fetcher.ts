@@ -49,8 +49,8 @@ export function getStoredUser<T = unknown>(): T | null {
   }
 }
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+export const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "https://l2-solution-6.vercel.app/api/v1";
 
 export async function fetcher<T = unknown>(
   endpoint: string,
@@ -113,4 +113,61 @@ export async function fetcher<T = unknown>(
   }
 
   return (parsedData?.data !== undefined ? parsedData.data : parsedData) as T;
+}
+
+export async function fetcherWithMeta<T = unknown>(
+  endpoint: string,
+  options: RequestInit = {}
+): Promise<{ data: T; meta?: { page: number; limit: number; total: number; totalPage: number } }> {
+  let token: string | null = null;
+
+  if (typeof window !== "undefined") {
+    token = getAccessToken();
+  }
+
+  const isFormData = options.body instanceof FormData;
+  const headers: Record<string, string> = {
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
+    ...((options.headers as Record<string, string>) || {}),
+  };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  const res = await fetch(`${API_BASE_URL}${endpoint}`, {
+    ...options,
+    headers,
+  });
+
+  const responseText = await res.text();
+  let parsedData: any = null;
+
+  if (responseText) {
+    try {
+      parsedData = JSON.parse(responseText);
+    } catch {
+      parsedData = { message: responseText };
+    }
+  }
+
+  if (!res.ok) {
+    const errorMessage =
+      typeof parsedData?.message === "string"
+        ? parsedData.message
+        : typeof parsedData?.error === "string"
+        ? parsedData.error
+        : `Request failed with status ${res.status}`;
+    const errorObj: FetcherError = {
+      error: errorMessage,
+      statusCode: res.status,
+      details: parsedData,
+    };
+    throw errorObj;
+  }
+
+  return {
+    data: (parsedData?.data !== undefined ? parsedData.data : parsedData) as T,
+    meta: parsedData?.meta,
+  };
 }
